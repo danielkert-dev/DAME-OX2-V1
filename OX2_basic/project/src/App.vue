@@ -6,6 +6,7 @@ import DataComp from './components/widgets/DataComp.vue';
 import NodeComp from './components/widgets/NodeComp.vue';
 import { onMounted, ref, nextTick, watch } from 'vue';
 
+// Test change
 const wpAPI = useWpAPIStore();
 const weatherAPI = useWeatherAPIStore();
 const postData = ref([]);
