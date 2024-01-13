@@ -1,17 +1,13 @@
-// store.js
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
-
-const data = ref(null);
-const response = ref(null);
-const error = ref(null);
-const loading = ref(true);
-
-const API_BASE_URL = 'https://www.datanom.ax/~kjell/ox2/wp-json/wp/v2/';
+import { useFetch } from '../services/useFetch';
 
 export const useWpAPIStore = defineStore('wordpressAPI', {
   state: () => ({
-    apiLink: API_BASE_URL,
+    apiLink: 'https://www.datanom.ax/~kjell/ox2/wp-json/wp/v2/',
+    wpData: [],
+    wpResponse: null,
+    wpError: null,
+    wpLoading: false,
   }),
   actions: {
     async request(method, uri, params = {}) {
@@ -19,24 +15,23 @@ export const useWpAPIStore = defineStore('wordpressAPI', {
       this.wpLoading = true;
 
       try {
+        const { data, response, error, loading } = await useFetch(url, method, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          ...params,
+        });
 
-        try {
-          const result = await fetch(url, { method, ...params });
-          data.value = await result.json();
-          response.value = result;
-        } catch (ex) {
-          error.value = ex;
-        } finally {
-          loading.value = false;
-        }
+        this.wpData = data;
+        this.wpResponse = response;
+        this.wpError = error;
+        this.wpLoading = loading;
+
         return { data, response, error, loading };
-
       } catch (error) {
-
         this.wpError = error;
         this.wpLoading = false;
         return { error, loading: false };
-        
       }
     },
     async get(uri, params) {
@@ -45,6 +40,8 @@ export const useWpAPIStore = defineStore('wordpressAPI', {
     async post(uri, params) {
       return this.request('POST', uri, params);
     },
-
+    async head(uri, params) {
+      return this.request('HEAD', uri, params);
+    },
   },
 });
