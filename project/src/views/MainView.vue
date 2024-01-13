@@ -3,7 +3,7 @@ import WpAPIComp from '../components/global/WpAPIComp.vue';
 import { useTextStore } from '../stores/TextStore.js';
 import { useDataStore } from '../stores/DataStore.js';
 
-useDataStore().initData();
+useDataStore().setData();
 
 </script>
 
@@ -13,7 +13,7 @@ useDataStore().initData();
 <WpAPIComp/>
 
 
-{{  console.log(useDataStore().$state.dataDate) }}
+<!-- {{  console.log(useDataStore().$state) }} -->
 <div v-for="text in useDataStore().$state">
     <!-- Display json -->
     {{ text }}

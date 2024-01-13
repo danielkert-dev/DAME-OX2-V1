@@ -1,6 +1,6 @@
 <script setup>
 
-/* Imports
+/* //@ Imports
     - Wordpress api fetch
     - Language store to change language
     - Text store to access fetch globaly
@@ -12,7 +12,7 @@ import { useLanguageStore } from '../../stores/LanguageStore.js';
 import { useTextStore } from '../../stores/TextStore.js';
 
 
-/* Variables 
+/* //@ Variables 
     - Set path and queries
 */
 
@@ -34,7 +34,8 @@ const selectedLanguage = ref(useLanguageStore().getLanguage());
 let posts = ref({});
 let categories = ref({});
 
-/* Methods */
+/* //@ Methods 
+*/
 
 onMounted(async () => {
   try {
@@ -46,7 +47,8 @@ onMounted(async () => {
   }
 });
 
-/* Watchers */
+/* //@ Watchers 
+*/
 
 watch(endpointCategories, async (newEndpoint) => {
   try {
@@ -58,7 +60,8 @@ watch(endpointCategories, async (newEndpoint) => {
   }
 });
 
-/* Functions */
+/* //@ Functions 
+*/
 
 function updateLanguage() {
   useLanguageStore().setLanguage(selectedLanguage.value);
