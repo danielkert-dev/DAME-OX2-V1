@@ -1,8 +1,7 @@
 <script setup>
+
 </script>
 
 <template>
-    <RouterView />
+    <h3>About</h3>
 </template>
-
-<style lang="scss"></style>

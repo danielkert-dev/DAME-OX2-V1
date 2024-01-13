@@ -1,47 +1,28 @@
 import { defineStore } from 'pinia';
-import { useFetch } from '../services/useFetch';
 
-export const useWpAPIStore = defineStore('wordpressAPI', {
+const API_BASE_URL = 'https://www.datanom.ax/~kjell/ox2/wp-json/wp/v2/';
+
+export const useWpAPIStore = defineStore('wpAPI', {
   state: () => ({
-    apiLink: 'https://www.datanom.ax/~kjell/ox2/wp-json/wp/v2/',
-    wpData: [],
-    wpResponse: null,
-    wpError: null,
-    wpLoading: false,
+    apiLink: API_BASE_URL,
   }),
   actions: {
-    async request(method, uri, params = {}) {
-      const url = this.apiLink + uri;
-      this.wpLoading = true;
+    async fetchData(endpoint, queryParams) {
+      const url = `${this.apiLink}${endpoint}${queryParams ? `?${queryParams}` : ''}`;
 
       try {
-        const { data, response, error, loading } = await useFetch(url, method, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          ...params,
-        });
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch data from ${url}`);
+        }
 
-        this.wpData = data;
-        this.wpResponse = response;
-        this.wpError = error;
-        this.wpLoading = loading;
-
-        return { data, response, error, loading };
+        const data = await response.json();
+        return data;
       } catch (error) {
-        this.wpError = error;
-        this.wpLoading = false;
-        return { error, loading: false };
+        console.error(error);
+        throw new Error('Failed to fetch data.');
       }
     },
-    async get(uri, params) {
-      return this.request('GET', uri, params);
-    },
-    async post(uri, params) {
-      return this.request('POST', uri, params);
-    },
-    async head(uri, params) {
-      return this.request('HEAD', uri, params);
-    },
   },
+  getters: {},
 });
