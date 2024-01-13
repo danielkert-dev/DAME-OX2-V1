@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
-import { useWpAPIStore } from '../stores/WpAPIStore';
+import { useWpAPIStore } from '../../../stores/WpAPIStore';
 
 const wpAPIStore = useWpAPIStore();
 

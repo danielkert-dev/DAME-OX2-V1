@@ -7,16 +7,16 @@ const response = ref(null);
 const error = ref(null);
 const loading = ref(true);
 
-const API_BASE_URL = 'https://www.datanom.ax/~kjell/ox2/wp-json/wp/v2/';
+const API_BASE_URL = `https://api.open-meteo.com/v1/forecast?latitude=60.11354447300488&longitude=19.90986781165426&daily=weather_code,temperature_2m_max,temperature_2m_min,daylight_duration,sunshine_duration&timezone=auto`;
 
-export const useWpAPIStore = defineStore('wordpressAPI', {
+export const useWeatherAPIStore = defineStore('weatherAPI', {
   state: () => ({
     apiLink: API_BASE_URL,
+
   }),
   actions: {
     async request(method, uri, params = {}) {
       const url = this.apiLink + uri;
-      this.wpLoading = true;
 
       try {
 
@@ -32,9 +32,6 @@ export const useWpAPIStore = defineStore('wordpressAPI', {
         return { data, response, error, loading };
 
       } catch (error) {
-
-        this.wpError = error;
-        this.wpLoading = false;
         return { error, loading: false };
         
       }
