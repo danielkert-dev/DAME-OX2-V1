@@ -19,17 +19,16 @@ export function processDailyData(weatherData) {
           if (date !== currentDate) {
             // New day, save the average irradiance for the previous day
             if (currentDate !== null) {
-              const averageIrradiance = Math.round(totalIrradiance / hourCount);
-              const sunshine = weatherData.daily.sunshine_duration[day-1]
-              const sunshineHours = Math.floor(sunshine / 3600)
-              const sunshineMinutes = Math.floor((sunshine % 3600) / 60)
+              // const sunshine = weatherData.daily.sunshine_duration[day-1]
+              // const sunshineHours = Math.floor(sunshine / 3600)
+              // const sunshineMinutes = Math.floor((sunshine % 3600) / 60)
               const weather = weatherData.daily.weather_code[day-1]
               const temperature = weatherData.daily.temperature_2m_max[day-1]
   
               dataForDaily.push({
                 date: currentDate,
-                averageIrradiance: averageIrradiance,
-                sunshine: sunshineHours + "." + sunshineMinutes,
+                totalIrradiance: totalIrradiance,
+                // sunshine: sunshineHours + "." + sunshineMinutes,
                 weather: weather,
                 temperature: temperature,
               });
@@ -49,10 +48,9 @@ export function processDailyData(weatherData) {
       
         // Add the last day's average irradiance
         if (currentDate !== null) {
-          const averageIrradiance = Math.round(totalIrradiance / hourCount);
           dataForDaily.push({
             date: currentDate,
-            averageIrradiance: averageIrradiance,
+            totalIrradiance: totalIrradiance,
           });
         }
   
@@ -80,10 +78,11 @@ export function processDailyData(weatherData) {
     if (dataForDaily && Array.isArray(dataForDaily)) {
       // Solar Irradence = Direct Normal Irradiance
       const panelArea = 56;
+      const panelEfficiency = 0.35;
   
       // Calculate energy for each day using the formula
       let completeData = dataForDaily.map(day => {
-        const energy = day.averageIrradiance * panelArea * day.sunshine;
+        const energy = day.totalIrradiance * panelArea * panelEfficiency;
         // If before today then past if after today then future if today then current
         const age =
           day.date > new Date().toISOString().slice(0, 10)
@@ -94,7 +93,7 @@ export function processDailyData(weatherData) {
         return {
           date: day.date,
           energyW: energy.toFixed(2),
-          energyKWh: ((energy / 1000) * day.sunshine).toFixed(2),
+          energyKWh: (energy / 1000).toFixed(2),
           weather: day.weather,
           temperature: day.temperature,
           sunshine: day.sunshine,
@@ -103,14 +102,14 @@ export function processDailyData(weatherData) {
         };
       });
     
-      console.log(completeData);
+      // console.log(completeData);
       return completeData;
 
     }
   }
   
   export function calculateWeeklyData(completeData) {
-    console.log(completeData);
+    // console.log(completeData);
     // Convert to weekly
     const weeklyData = [];
     let currentWeek = [];
@@ -154,7 +153,7 @@ export function processDailyData(weatherData) {
     });
 
     // this.dataWeeklyOutput = weeklyData;
-    console.log(weeklyData);
+    // console.log(weeklyData);
     return weeklyData; // Add this line to return the weeklyData
   }
   

@@ -17,6 +17,7 @@ import { RouterView, RouterLink } from 'vue-router'
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
 
 body {
+    // Background opacity
     font-family: 'Poppins', sans-serif;
 }
 

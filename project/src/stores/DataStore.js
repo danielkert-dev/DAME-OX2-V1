@@ -16,7 +16,7 @@ export const useDataStore = defineStore('data', {
       const completeData = await calculateEnergy(dataForDaily);
       this.dataOutput = completeData;
 
-      console.log(this.dataOutput);
+      // console.log(this.dataOutput);
       const weeklyData = await calculateWeeklyData(completeData);
       this.dataWeeklyOutput = weeklyData;
 
