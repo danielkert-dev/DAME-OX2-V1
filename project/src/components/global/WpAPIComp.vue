@@ -74,7 +74,7 @@ function setToTextStore() {
 </script>
 
 <template>
-  <select class="lang-select form-select m-2" v-model="selectedLanguage" @change="updateLanguage">
+  <select class="lang-select form-select mt-2" v-model="selectedLanguage" @change="updateLanguage">
     <option value="en">en</option>
     <option value="sv">sv</option>
   </select>
@@ -84,7 +84,7 @@ function setToTextStore() {
 <style scoped>
 
 .lang-select {
-  min-width: 4rem;
+  min-width: 5rem;
 }
 
 </style>

@@ -4,6 +4,7 @@ import { useTextStore } from '../stores/TextStore.js';
 import { useDataStore } from '../stores/DataStore.js';
 import { weatherCodes } from '../components/WeatherCodesComp.js';
 import { onMounted, ref, watch, computed, nextTick} from 'vue';
+import { GChart } from "vue-google-charts";
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Pagination, Scrollbar } from 'swiper/modules';
 
@@ -25,13 +26,14 @@ const dailyData = ref('');
 const weeklyData = ref('')
 const selectedData = ref('')
 const selectedDate = ref('')
+const firstDate = ref('')
+const lastDate = ref('')
 const textData = ref('')
 const textList = ref([]);
 
 const selectedSlide = ref('');
 
 const swiperRef = ref(null);
-
 
 /* //@ On mounted
  */
@@ -45,8 +47,11 @@ onMounted(async () => {
     );
     selectedDate.value = today;
 
+    firstDate.value = dailyData.value[0].date;
+    lastDate.value = dailyData.value[dailyData.value.length - 1].date;
+
     goToSlide(getIndexFromDate(today));
-    window.addEventListener('resize', () => {getCenter();});
+    // window.addEventListener('resize', () => {getCenter();});
     // console.log(dailyData.value);
     // console.log(weeklyData.value);
 
@@ -107,8 +112,34 @@ watch(selectedDate, () => {
 /* //@ Functions
  */
 
+ 
+/* //! Swift
+ */
 
-/* //! Other* 
+function getRef (swiperInstance) {
+  swiperRef.value = swiperInstance
+}
+
+function getIndexFromDate(date) {
+  return dailyData.value.findIndex((data) => data.date === date);
+}
+
+const goToSlide = (index) => {
+  swiperRef.value.slideTo(index);
+};
+
+function next () {
+  swiperRef.value.slideNext() // should work
+}
+
+function prev () {
+  swiperRef.value.slidePrev() // should work
+}
+
+
+
+
+/* //@ Other* 
 */
 
 function removeYear(date) {
@@ -143,38 +174,34 @@ function weatherCodeToIcon(code) {
     const weatherCode = weatherCodes[0][code];
     return weatherCode.day.image;
 }
-/* //! Swift
- */
 
-function getRef (swiperInstance) {
-  swiperRef.value = swiperInstance
-}
+/* chart*/
+const chartData = ref([
+  ["Type", "KWH"], // Add a new column for colors
+  ["Elnät", 100], // Use color1 for the first slice
+  ["Vätegas", 20], // Use color2 for the second slice
+  ["Batteri", 20], // Use color3 for the third slice
+]);
 
-function getIndexFromDate(date) {
-  return dailyData.value.findIndex((data) => data.date === date);
-}
+const chartOptions = ref({
+  title: "",
+  legend: { position: "bottom" },
+  fontName:'Poppins',
+  fontSize: 15,
+  pieStartAngle: 100,
+  colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6']
+});
 
-const goToSlide = (index) => {
-  swiperRef.value.slideTo(index);
-};
-
-function next () {
-  swiperRef.value.slideNext() // should work
-}
-
-function prev () {
-  swiperRef.value.slidePrev() // should work
-}
-
+const chartType = ref("PieChart");
 
 
 </script>
 
 <template>
     <div class="container">
-        <nav class="d-flex justify-content-between mt-2">
+        <nav class="d-flex justify-content-between pt-2">
         <div>
-            <h4 class="">OX2 Forecast</h4>
+            <h4 class="mt-2">OX2 Forecast</h4>
             <p class="text-muted">Möckelö</p>
         </div>
         <div class="d-flex justify-content-center">
@@ -188,7 +215,10 @@ function prev () {
 
 
             <div v-if="dataType === 'daily'">
-                <input type="date" v-model="selectedDate" class="form-control m-2 dateSelectDaily" style="width: 10rem; height: fit-content" />
+                <!-- Diable date selectedData before first date after last date -->
+                <input type="date" v-model="selectedDate"
+                 :min="firstDate" :max="lastDate"
+                 class="form-control m-2 dateSelectDaily" style="width: 10rem; height: fit-content" />
             </div>
 
             <div v-else-if="dataType === 'weekly'">
@@ -207,6 +237,11 @@ function prev () {
 
         </nav>
 
+        <div class="mt-2 dateInfo text-muted">
+                <p class="card-title">{{ convertDate(selectedData.date) }}</p>
+                <p class="card-text weatherText">{{ selectedData.temperature}}°C <img class="weatherImage rounded" :src="weatherCodeToIcon(selectedData.weather)" alt="" width="25" height="25"> </p>
+                </div>
+
 <!--   :scrollbar="{ hide: true, dragSize: '50%', draggable: true, snapOnRelease: true }" -->
 <swiper
   ref='{swiperRef}'
@@ -218,7 +253,8 @@ function prev () {
   @slideChange="selectedSlide = $event.activeIndex; selectedDate = dailyData[$event.activeIndex].date;"
   @swiper="getRef"
   class="mySwiper"
->
+>   
+
       <template v-for="(data, index) in dailyData" :key="data.date">
         <!-- if not active then notActiveSlide class -->
         <swiper-slide class="mySlide d-flex align-items-end justify-content-center" :class="{ activeSlide: index === selectedSlide, notActiveSlide: index !== selectedSlide }"
@@ -244,13 +280,8 @@ function prev () {
 
 <!-- or ul.my-slider > li -->
 
-        <div class="m-5">
+        <div class="">
             <div class="mainBox">
-
-                <div class="w-100 text-center">
-                <h5 class="card-title">{{ convertDate(selectedData.date) }}</h5>
-                <p class="card-text weatherText">{{ selectedData.temperature}}°C <img :src="weatherCodeToIcon(selectedData.weather)" alt="" width="25" height="25"> </p>
-                </div>
 
                 <br><br>
 
@@ -272,14 +303,31 @@ function prev () {
                 <p class="card-text text-center"> 100% Battery</p>
                 </div>
 
-                
-                <img src="https://danielkertdev.pockethost.io/api/files/1lwpjj9b3z5a50y/m0bz450hkf3u0pm/pichart_5Js5FtJcsu.JPG?token=">
+
+                <div class="row">
+                    <div class="col-md-6 p-3">
+                        <!-- When all the data is available -->
+                <GChart
+      :type="chartType"
+      :data="chartData"
+      :options="chartOptions"
+    ></GChart>
+    </div>
+
+        <div class="col-md-6 p-5">
+            <h1>Description</h1>
+            <br><br>
+            <!-- From wordpress add text with integrated data -->
+            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Rem officia eligendi, nulla facere eveniet provident. </p>
+        </div>
+
+                </div>
 
                 </div>
                 </div>
         </div> 
     </div>
-    <!-- {{ selectedData }} -->
+
 
 </template>
 
@@ -289,6 +337,14 @@ $main-color : #416661;
 $secondary-color : #004140;
 $third-color : #343434;
 $text-color: #F8F7F6;
+
+.dateInfo {
+    font-size: .8rem;
+    position: absolute;
+    z-index: 4;
+    top: 8rem;
+    width: 20rem;
+}
 
 
 .mySwiper {
@@ -376,9 +432,9 @@ $text-color: #F8F7F6;
 }
 
 
-
-
 /* Data */
+
+
 
 .mainBox {
 }

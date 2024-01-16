@@ -6,7 +6,7 @@ import { RouterView, RouterLink } from 'vue-router'
     <RouterView />
 
     <div class="container">
-    <footer class="text-center m-5 p-5">
+    <footer class="text-center pt-2">
         <RouterLink to="/" class="m-2 text-decoration-none text-muted">Home</RouterLink>
         <RouterLink to="/about" class="m-2 text-decoration-none text-muted">About</RouterLink>
     </footer>
