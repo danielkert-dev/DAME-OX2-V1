@@ -31,9 +31,9 @@ function goToView(dataType) {
 */
 
 watch(useDataTypeStore(), async() => {
-    console.log(dataType);
-    console.log(udts.firstDate);
-    console.log(udts.selectedDate);
+    // console.log(dataType);
+    // console.log(udts.firstDate);
+    // console.log(udts.selectedDate);
 
     firstDate.value = udts.firstDate
     lastDate.value = udts.lastDate
@@ -77,7 +77,7 @@ watch(() => router.currentRoute.value, () => {
                 <option value="daily" :selected="dataType === 'daily'">Daily</option>
                 <option value="monthly" :selected="dataType === 'monthly'">Monthly
                 </option>
-                <option value="yearly" disabled>Yearly</option>
+                <option value="yearly" :selected="dataType === 'yearly'">Yearly</option>
             </select>
 
 

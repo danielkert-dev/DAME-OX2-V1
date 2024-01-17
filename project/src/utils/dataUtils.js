@@ -90,6 +90,19 @@ export function processDailyData(weatherData) {
             : day.date === new Date().toISOString().slice(0, 10)
             ? "current"
             : "past";
+
+
+        let accuracy = 100;
+        if (age === 'current') {
+          accuracy = 99;
+        }
+        if (age === 'past') {
+          accuracy = 100;
+        }
+        if (age === 'future') {
+          accuracy = 90;
+        }
+
         return {
           date: day.date,
           energyW: energy.toFixed(2),
@@ -98,6 +111,7 @@ export function processDailyData(weatherData) {
           temperature: day.temperature,
           sunshine: day.sunshine,
           age: age,
+          accuracy: accuracy,
         };
       });
 

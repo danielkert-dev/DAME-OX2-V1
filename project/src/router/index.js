@@ -14,6 +14,11 @@ const router = createRouter({
       component: () => import('../views/MonthlyView.vue')
     },
     {
+      path: '/yearly',
+      name: 'yearly',
+      component: () => import('../views/YearlyView.vue')
+    },
+    {
       path: '/about',
       name: 'about',
       // route level code-splitting

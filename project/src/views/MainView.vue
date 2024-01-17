@@ -108,13 +108,33 @@ watch(dataType, () => {
 });
 
 watch(useDataTypeStore(), async() => {
-    console.log(dataType);
-    console.log(udts.firstDate);
-    console.log(udts.selectedDate);
+    // console.log(dataType);
+    // console.log(udts.firstDate);
+    // console.log(udts.selectedDate);
 
     firstDate.value = udts.firstDate
     lastDate.value = udts.lastDate
     selectedDate.value = udts.selectedDate
+
+    accuracyData.value = [
+  ['Name', 'Accuracy'],
+  ['Accuracy', {v: selectedData.value.accuracy, f: '90%'}],
+  ['Rest', {v: 100 - (100 * (selectedData.value.accuracy / 100)), f: '10%'}],
+    ]
+
+    chartData.value = [
+  ["Type", "KWH"], // Add a new column for colors
+  ["Elnät", selectedData.value.energyKWh / 2], // Use color1 for the first slice
+  ["Vätegas", selectedData.value.energyKWh / 5], // Use color2 for the second slice
+  ["Batteri", selectedData.value.energyKWh / 5], // Use color3 for the third slice
+    ]
+
+    if (selectedData.value.energyKWh == 0.00) {
+                chartData.value = [
+        ["Type", "KWH"], // Add a new column for colors
+        ["No energy", 0.00001], // Use color1 for the first slice
+            ]
+    }
 });
 
 
@@ -122,6 +142,7 @@ watch(useDataTypeStore(), async() => {
 watch(selectedDate, () => {
 
     udts.selectedDate = selectedDate.value
+
 
     if (dataType === 'daily') {
         selectedData.value = dailyData.value.find((data) => data.date === selectedDate.value);
@@ -207,27 +228,33 @@ const chartData = ref([
 ]);
 
 const chartOptions = ref({
-  title: "",
-  legend: { position: "bottom" },
+//    title: "KWH",
+  titleTextStyle: { alignment: "center" },
+  legend: { position: "left", alignment: "center"},
+//   chartArea: {left: 0},  
+
   backgroundColor: { fill:'transparent' },
   fontName:'Poppins',
   fontSize: 15,
+  height: 200,
+  pieSliceText: 'value',
   pieStartAngle: 100,
-  colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6']
+  // Energy color, Hydrogen color, Battery color
+  colors: ['#5f9ea0', '#d9ead3', '#f9dc5c', '#f3b49f', '#f6c7b6']
 });
 
 const chartType = ref("PieChart");
 
 const accuracyData = ref([
   ['Name', 'Accuracy'],
-  ['Accuracy', {v: .9, f: '90%'}],
+  ['Accuracy', {v: selectedData.accuracy, f: '90%'}],
   ['Rest', {v: .1, f: '10%'}],
 ]);
 const accuracyOptions = ref({
   pieHole: 0.85,
   chartArea: { width: '80%', height: '80%' },
   height: 100,
-  pieStartAngle: 90,
+    pieStartAngle: 0,
   pieSliceText: 'value',
   backgroundColor: { fill: 'transparent' },
   pieSliceTextStyle: {
@@ -310,7 +337,7 @@ const accuracyType = ref("PieChart");
                 </div>
                 
                 <div class="rounded col-md-3 px-3 infoBox">
-                <p class="card-text text-center accuracyNumber"> 90%</p>
+                <p class="card-text text-center accuracyNumber"> {{ selectedData.accuracy }}%</p>
                             <GChart
                             class="accuracyChart"
                 :type="accuracyType"
@@ -325,11 +352,14 @@ const accuracyType = ref("PieChart");
                     <div class="col-md-6 p-3">
 
                         <!-- When all the data is available -->
+                        <!-- <p class="pieTitle">KWH</p> -->
                 <GChart
+        class="shareChart"
       :type="chartType"
       :data="chartData"
       :options="chartOptions"
     ></GChart>
+
     </div>
 
         <div class="col-md-6 p-5">
@@ -346,7 +376,8 @@ const accuracyType = ref("PieChart");
         </div> 
     </div>
 
-{{ selectedData }}
+<!-- {{ selectedData }} -->
+{{ textList }}
 
 </template>
 
@@ -467,16 +498,19 @@ $text-color: #F8F7F6;
     
 }
 
+
 .weatherImage {
     width: 5rem;
     height: 5rem;
     // background-color: $main-color;
 }
 
-
-
 .infoBox{
     background-color: $text-color;
+}
+
+.shareChart {
+    margin-top: 2rem;
 }
 
 </style>
