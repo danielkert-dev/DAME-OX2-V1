@@ -1,9 +1,6 @@
 <script setup>
 import { onMounted, ref, watch, computed, nextTick} from 'vue';
-import { useRouter } from 'vue-router';
-const router = useRouter();
 
-import WpAPIComp from '../components/global/WpAPIComp.vue';
 import { weatherCodes } from '../components/WeatherCodesComp.js';
 
 
@@ -95,17 +92,17 @@ watch(useTextStore(), async () => {
 
 
 // When chaning day or week it changes the data
-watch(dataType, () => {
-    console.log(dataType);
-    selectedDate.value = new Date().toISOString().slice(0, 10);
+// watch(dataType, () => {
+//     console.log(dataType);
+//     selectedDate.value = new Date().toISOString().slice(0, 10);
 
-    if (dataType === 'daily') {
-        selectedData.value = dailyData.value.find((data) => data.date === selectedDate.value)
-        goToSlide(getIndexFromDate(selectedDate.value));
-    } else {
-        console.error('DataType not found');
-    }
-});
+//     if (dataType === 'daily') {
+//         selectedData.value = dailyData.value.find((data) => data.date === selectedDate.value)
+//         goToSlide(getIndexFromDate(selectedDate.value));
+//     } else {
+//         console.error('DataType not found');
+//     }
+// });
 
 watch(useDataTypeStore(), async() => {
     // console.log(dataType);
@@ -201,10 +198,10 @@ function convertDate(date) {
   return `${year} ${months[parseInt(date.split('-')[1]) - 1]} ${day}`;
 }
 
-function removeDashesFromDate(date) {
-    // all dashes
-    return date.split('-').join(' ');
-}
+// function removeDashesFromDate(date) {
+//     // all dashes
+//     return date.split('-').join(' ');
+// }
 
 function replaceDashesWithDot(date) {
     // all dashes
@@ -484,9 +481,9 @@ $text-color: #F8F7F6;
 
 /* Data */
 .accuracyNumber {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     color: green;
-    translate: 0 48px;
+    translate: 2px 50px;
     height: 0;
     margin-left: auto;
     margin-right: auto;
@@ -495,7 +492,6 @@ $text-color: #F8F7F6;
 .accuracyChart {
     margin-left: auto;
     margin-right: auto;
-    
 }
 
 

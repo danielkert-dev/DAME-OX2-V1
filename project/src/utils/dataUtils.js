@@ -54,7 +54,7 @@ export function processDailyData(weatherData) {
           });
         }
   
-        console.log(dataForDaily)
+        // console.log(dataForDaily)
         return dataForDaily; // Add this line to return the dataForDaily
   }
   
@@ -125,55 +125,6 @@ export function processDailyData(weatherData) {
     }
   }
   
-  export function calculateWeeklyData(completeData) {
-    // console.log(completeData);
-    // Convert to weekly
-    const weeklyData = [];
-    let currentWeek = [];
-    let weekStartDate = null;
-
-    completeData.forEach(day => {
-      if (!weekStartDate) {
-        weekStartDate = day.date;
-      }
-      currentWeek.push(day);
-      
-      const nextDay = new Date(day.date);
-      nextDay.setDate(nextDay.getDate() + 1);
-
-       // If its this week then set today date
-       let thisWeek = ''
-       if (day.date === new Date().toISOString().slice(0, 10)) {
-         thisWeek = new Date().toISOString().slice(0, 10);
-       } else {
-         thisWeek = new Date(day.date).toISOString().slice(0, 10);
-       }
-      
-      if (nextDay.getDay() === 1 || nextDay > new Date()) {
-        const energySum = currentWeek.reduce((sum, entry) => sum + parseFloat(entry.energyW), 0);
-        const sunshineSum = currentWeek.reduce((sum, entry) => sum + parseFloat(entry.sunshine), 0);
-        const averageEnergy = (energySum / currentWeek.length).toFixed(2);
-        const averageSunshine = (sunshineSum / currentWeek.length).toFixed(2);
-       
-
-        weeklyData.push({
-          date: thisWeek,
-          startDate: weekStartDate,
-          endDate: day.date,
-          averageEnergyW: averageEnergy,
-          averageEnergyKWh: ((averageEnergy / 1000) * averageSunshine).toFixed(2),
-        });
-
-        currentWeek = [];
-        weekStartDate = null;
-      }
-    });
-
-    // this.dataWeeklyOutput = weeklyData;
-    // console.log(weeklyData);
-    return weeklyData; // Add this line to return the weeklyData
-  }
-  
   export function calculateMonthlyData(completeData) {
         
     // Convert to monthly
@@ -212,3 +163,54 @@ export function processDailyData(weatherData) {
     // this.dataMonthlyOutput = monthlyData;
     return monthlyData; // Add this line to return the monthlyData
   }
+
+  
+  // export function calculateWeeklyData(completeData) {
+  //   // console.log(completeData);
+  //   // Convert to weekly
+  //   const weeklyData = [];
+  //   let currentWeek = [];
+  //   let weekStartDate = null;
+
+  //   completeData.forEach(day => {
+  //     if (!weekStartDate) {
+  //       weekStartDate = day.date;
+  //     }
+  //     currentWeek.push(day);
+      
+  //     const nextDay = new Date(day.date);
+  //     nextDay.setDate(nextDay.getDate() + 1);
+
+  //      // If its this week then set today date
+  //      let thisWeek = ''
+  //      if (day.date === new Date().toISOString().slice(0, 10)) {
+  //        thisWeek = new Date().toISOString().slice(0, 10);
+  //      } else {
+  //        thisWeek = new Date(day.date).toISOString().slice(0, 10);
+  //      }
+      
+  //     if (nextDay.getDay() === 1 || nextDay > new Date()) {
+  //       const energySum = currentWeek.reduce((sum, entry) => sum + parseFloat(entry.energyW), 0);
+  //       const sunshineSum = currentWeek.reduce((sum, entry) => sum + parseFloat(entry.sunshine), 0);
+  //       const averageEnergy = (energySum / currentWeek.length).toFixed(2);
+  //       const averageSunshine = (sunshineSum / currentWeek.length).toFixed(2);
+       
+
+  //       weeklyData.push({
+  //         date: thisWeek,
+  //         startDate: weekStartDate,
+  //         endDate: day.date,
+  //         averageEnergyW: averageEnergy,
+  //         averageEnergyKWh: ((averageEnergy / 1000) * averageSunshine).toFixed(2),
+  //       });
+
+  //       currentWeek = [];
+  //       weekStartDate = null;
+  //     }
+  //   });
+
+  //   // this.dataWeeklyOutput = weeklyData;
+  //   // console.log(weeklyData);
+  //   return weeklyData; // Add this line to return the weeklyData
+  // }
+  
