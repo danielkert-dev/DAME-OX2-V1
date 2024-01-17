@@ -1,9 +1,16 @@
 <script setup>
+import { onMounted, ref, watch, computed, nextTick} from 'vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
 import WpAPIComp from '../components/global/WpAPIComp.vue';
+import { weatherCodes } from '../components/WeatherCodesComp.js';
+
+
 import { useTextStore } from '../stores/TextStore.js';
 import { useDataStore } from '../stores/DataStore.js';
-import { weatherCodes } from '../components/WeatherCodesComp.js';
-import { onMounted, ref, watch, computed, nextTick} from 'vue';
+import { useDataTypeStore } from '../stores/DataTypeStore';
+
 import { GChart } from "vue-google-charts";
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Pagination, Scrollbar } from 'swiper/modules';
@@ -21,13 +28,17 @@ const modules = [Pagination,  Scrollbar];
 
 useTextStore().setText();
 
-const dataType = ref('daily');
+const udts = useDataTypeStore()
+// const dataType = 'daily';
+const dataType = udts.dataType;
 const dailyData = ref('');
-const weeklyData = ref('')
 const selectedData = ref('')
 const selectedDate = ref('')
 const firstDate = ref('')
 const lastDate = ref('')
+
+
+
 const textData = ref('')
 const textList = ref([]);
 
@@ -41,19 +52,27 @@ onMounted(async () => {
     const today = new Date().toISOString().slice(0, 10);
     await useDataStore().setData();
     dailyData.value = await useDataStore().$state.dataOutput;
-    weeklyData.value = await useDataStore().$state.dataWeeklyOutput;
     selectedData.value = dailyData.value.find(
         (data) => data.date === today
     );
-    selectedDate.value = today;
+    selectedDate.value = udts.selectedDate;
 
     firstDate.value = dailyData.value[0].date;
     lastDate.value = dailyData.value[dailyData.value.length - 1].date;
 
+    udts.selectedDate = today
+    udts.firstDate = dailyData.value[0].date
+    udts.lastDate = dailyData.value[dailyData.value.length - 1].date
+
+    console.log(udts.firstD)
+
+    // await useDataTypeStore().firstDate = dailyData.value[0].date;
+    // await useDataTypeStore().lastDate = dailyData.value[dailyData.value.length - 1].date;
+
+
     goToSlide(getIndexFromDate(today));
     // window.addEventListener('resize', () => {getCenter();});
     // console.log(dailyData.value);
-    // console.log(weeklyData.value);
 
 
     nextTick(() => {
@@ -77,37 +96,41 @@ watch(useTextStore(), async () => {
 
 // When chaning day or week it changes the data
 watch(dataType, () => {
+    console.log(dataType);
     selectedDate.value = new Date().toISOString().slice(0, 10);
 
-    if (dataType.value === 'daily') {
+    if (dataType === 'daily') {
         selectedData.value = dailyData.value.find((data) => data.date === selectedDate.value)
-        goToSlide(getIndexFromDate(selectedDate.value));
-    } else if (dataType.value === 'weekly') {
-        selectedData.value = weeklyData.value.find((data) => data.date === selectedDate.value);
         goToSlide(getIndexFromDate(selectedDate.value));
     } else {
         console.error('DataType not found');
     }
 });
+
+watch(useDataTypeStore(), async() => {
+    console.log(dataType);
+    console.log(udts.firstDate);
+    console.log(udts.selectedDate);
+
+    firstDate.value = udts.firstDate
+    lastDate.value = udts.lastDate
+    selectedDate.value = udts.selectedDate
+});
+
 
 // Change the data when i pick a date
 watch(selectedDate, () => {
-    if (dataType.value === 'daily') {
+
+    udts.selectedDate = selectedDate.value
+
+    if (dataType === 'daily') {
         selectedData.value = dailyData.value.find((data) => data.date === selectedDate.value);
-        goToSlide(getIndexFromDate(selectedDate.value));
-    } else if (dataType.value === 'weekly') {
-        selectedData.value = weeklyData.value.find((data) => data.date === selectedDate.value);
         goToSlide(getIndexFromDate(selectedDate.value));
     } else {
         console.error('DataType not found');
     }
 });
 
-// watch window width
-
-// watch(selectedSlide, (newValue) => {
-
-// });
 
 /* //@ Functions
  */
@@ -186,6 +209,7 @@ const chartData = ref([
 const chartOptions = ref({
   title: "",
   legend: { position: "bottom" },
+  backgroundColor: { fill:'transparent' },
   fontName:'Poppins',
   fontSize: 15,
   pieStartAngle: 100,
@@ -194,60 +218,46 @@ const chartOptions = ref({
 
 const chartType = ref("PieChart");
 
+const accuracyData = ref([
+  ['Name', 'Accuracy'],
+  ['Accuracy', {v: .9, f: '90%'}],
+  ['Rest', {v: .1, f: '10%'}],
+]);
+const accuracyOptions = ref({
+  pieHole: 0.85,
+  chartArea: { width: '80%', height: '80%' },
+  height: 100,
+  pieStartAngle: 90,
+  pieSliceText: 'value',
+  backgroundColor: { fill: 'transparent' },
+  pieSliceTextStyle: {
+    color: 'black',
+  },
+  legend: 'none',
+  pieSliceBorderColor: 'transparent',
+  slices: {
+    0: { color: 'green', textStyle: { color: 'transparent' } },
+    1: { color: 'transparent', textStyle: { color: 'transparent' } }
+  }
+});
+
+const accuracyType = ref("PieChart");
 
 </script>
 
 <template>
-    <div class="container">
-        <nav class="d-flex justify-content-between pt-2">
-        <div>
-            <h4 class="mt-2">OX2 Forecast</h4>
-            <p class="text-muted">Möckelö</p>
-        </div>
-        <div class="d-flex justify-content-center">
-            <div class="d-flex flex-wrap justify-content-center">
-            <select v-model="dataType" class="form-select m-2 dataTypeSelect" style="width: 8rem; height: fit-content">
-                <option value="daily" selected>Daily</option>
-                <option value="monthly" disabled>Monthly</option>
-                <option value="yearly" disabled>Yearly</option>
-            </select>
-
-
-
-            <div v-if="dataType === 'daily'">
-                <!-- Diable date selectedData before first date after last date -->
-                <input type="date" v-model="selectedDate"
-                 :min="firstDate" :max="lastDate"
-                 class="form-control m-2 dateSelectDaily" style="width: 10rem; height: fit-content" />
-            </div>
-
-            <div v-else-if="dataType === 'weekly'">
-                <select v-model="selectedDate" class="form-select m-2" style="width: 16rem; height: fit-content">
-                    <option v-for="data in weeklyData" :key="data.date" :value="data.date">
-                        {{ data.startDate }} - {{ data.endDate }}
-                    </option>
-                    </select>
-            </div>
-
-        </div>
-        </div>
-        <div class="">
-            <WpAPIComp />
-        </div>
-
-        </nav>
-
-        <div class="mt-2 dateInfo text-muted">
-                <p class="card-title">{{ convertDate(selectedData.date) }}</p>
-                <p class="card-text weatherText">{{ selectedData.temperature}}°C <img class="weatherImage rounded" :src="weatherCodeToIcon(selectedData.weather)" alt="" width="25" height="25"> </p>
-                </div>
-
+    <div class="container" style="">
+        <p class="w-100 dateTop text-muted" style="font-size: .8rem">{{ convertDate(selectedData.date) }} <br> {{ selectedData.age }}</p>
+ 
 <!--   :scrollbar="{ hide: true, dragSize: '50%', draggable: true, snapOnRelease: true }" -->
+<!-- Clickable sliders -->
 <swiper
   ref='{swiperRef}'
 :slidesPerView="20"
   :spaceBetween="0"
   :centeredSlides="true"
+  
+  :mousewheel="true"
   :pagination="false" 
   :modules="modules"
   @slideChange="selectedSlide = $event.activeIndex; selectedDate = dailyData[$event.activeIndex].date;"
@@ -281,31 +291,39 @@ const chartType = ref("PieChart");
 <!-- or ul.my-slider > li -->
 
         <div class="">
-            <div class="mainBox">
-
-                <br><br>
+            <div class="mainBox mt-1">
 
                 <div class="row w-100 d-flex justify-content-between mx-auto g-4">
 
-                <div class="rounded col-md-3 p-3 infoBox">
-                    <p class="w-100 text-center">⚡</p>
-                <p class="card-text text-center">{{ selectedData.energyKWh}}KWH</p>
+                <div class="rounded col-md-3 p-3 infoBox d-flex justify-content-center align-content-center">
+                    <div class="d-flex flex-column justify-content-center align-content-center">
+                    <img class="weatherImage rounded mx-auto" :src="weatherCodeToIcon(selectedData.weather)" alt=""> 
+                <p class="card-text weatherText text-center mt-3">{{ selectedData.temperature}}°C </p>
+                </div>
                 </div>
 
-                <div class="rounded col-md-3 p-3 infoBox">
-                    <p class="w-100 text-center">⛽</p>
-                <p class="card-text text-center">Nan Hydrogen</p>
+                <div class="rounded col-md-3 p-3 infoBox d-flex justify-content-center align-content-center">
+                    <div class="d-flex flex-column justify-content-center align-content-center">
+                    <p class="w-100 text-center" style="font-size: 2rem; margin-bottom: .5rem">⚡</p>
+                <p class="card-text text-center mt-4" style="margin-bottom: -1rem">{{ selectedData.energyKWh}}KWH</p>
                 </div>
-
+                </div>
                 
-                <div class="rounded col-md-3 p-3 infoBox">
-                    <p class="w-100 text-center">🔋</p>
-                <p class="card-text text-center"> 100% Battery</p>
+                <div class="rounded col-md-3 px-3 infoBox">
+                <p class="card-text text-center accuracyNumber"> 90%</p>
+                            <GChart
+                            class="accuracyChart"
+                :type="accuracyType"
+                :data="accuracyData"
+                :options="accuracyOptions"
+                ></GChart>
+                <p class="text-center"> Accuracy</p>
                 </div>
 
 
-                <div class="row">
+                <div class="row mx-auto">
                     <div class="col-md-6 p-3">
+
                         <!-- When all the data is available -->
                 <GChart
       :type="chartType"
@@ -328,6 +346,7 @@ const chartType = ref("PieChart");
         </div> 
     </div>
 
+{{ selectedData }}
 
 </template>
 
@@ -338,12 +357,12 @@ $secondary-color : #004140;
 $third-color : #343434;
 $text-color: #F8F7F6;
 
-.dateInfo {
-    font-size: .8rem;
+.dateTop {
     position: absolute;
-    z-index: 4;
     top: 8rem;
-    width: 20rem;
+    left: 1.5rem;
+    z-index: 3;
+    width: 10%;
 }
 
 
@@ -433,11 +452,28 @@ $text-color: #F8F7F6;
 
 
 /* Data */
-
-
-
-.mainBox {
+.accuracyNumber {
+    font-size: 1.5rem;
+    color: green;
+    translate: 0 48px;
+    height: 0;
+    margin-left: auto;
+    margin-right: auto;
 }
+
+.accuracyChart {
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+
+.weatherImage {
+    width: 5rem;
+    height: 5rem;
+    // background-color: $main-color;
+}
+
+
 
 .infoBox{
     background-color: $text-color;

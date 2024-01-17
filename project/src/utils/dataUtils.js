@@ -12,7 +12,7 @@ export function processDailyData(weatherData) {
         let hourCount = 0;
         let day = 0;
       
-        for (let i = 0; i < hourlyTime.length; i++) {
+        for (let i = 0; i < hourlyTime.length ; i++) {
           const time = hourlyTime[i];
           const date = time.split("T")[0];
       
@@ -98,9 +98,12 @@ export function processDailyData(weatherData) {
           temperature: day.temperature,
           sunshine: day.sunshine,
           age: age,
-          type: "day",
         };
       });
+
+      // remove last data completeData
+      completeData.pop();
+
     
       // console.log(completeData);
       return completeData;

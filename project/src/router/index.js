@@ -9,6 +9,11 @@ const router = createRouter({
       component: () => import('../views/MainView.vue')
     },
     {
+      path: '/monthly',
+      name: 'monthly',
+      component: () => import('../views/MonthlyView.vue')
+    },
+    {
       path: '/about',
       name: 'about',
       // route level code-splitting

@@ -1,13 +1,25 @@
 <script setup>
 import { RouterView, RouterLink } from 'vue-router'
+import NavComp from './components/global/NavComp.vue'
+import { useDataTypeStore } from './stores/DataTypeStore';
+
+const udts = useDataTypeStore();
+
+function resetDataType() {
+    udts.dataType = 'daily';
+}
+
 </script>
 
 <template>
+    <NavComp/>
+    <!-- transition name="fade" -->
+
     <RouterView />
 
     <div class="container">
     <footer class="text-center pt-2">
-        <RouterLink to="/" class="m-2 text-decoration-none text-muted">Home</RouterLink>
+        <RouterLink to="/" class="m-2 text-decoration-none text-muted" @click="resetDataType()">Home</RouterLink>
         <RouterLink to="/about" class="m-2 text-decoration-none text-muted">About</RouterLink>
     </footer>
     </div>
