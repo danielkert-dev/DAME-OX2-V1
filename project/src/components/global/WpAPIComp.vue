@@ -10,6 +10,8 @@ import { ref, onMounted, computed, watch } from 'vue';
 import { useWpAPIStore } from '../../stores/WpAPIStore.js';
 import { useLanguageStore } from '../../stores/LanguageStore.js';
 import { useTextStore } from '../../stores/TextStore.js';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
 
 /* //@ Variables 
@@ -37,7 +39,18 @@ let categories = ref({});
 /* //@ Methods 
 */
 
-onMounted(async () => {
+async function setText() {
+  try {
+    categories.value = await useWpAPIStore().fetchData(endpointCategories.value, '');
+    posts.value = await useWpAPIStore().fetchData(endpointPosts+categories.value[0].id, '');
+    setToTextStore();
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+setText();
+
+watch(() => router.currentRoute.value, async () => {
   try {
     categories.value = await useWpAPIStore().fetchData(endpointCategories.value, '');
     posts.value = await useWpAPIStore().fetchData(endpointPosts+categories.value[0].id, '');
@@ -74,17 +87,36 @@ function setToTextStore() {
 </script>
 
 <template>
-  <select class="lang-select form-select mt-2" v-model="selectedLanguage" @change="updateLanguage">
-    <option value="en">en</option>
-    <option value="sv">sv</option>
+  <div class="h-100 d-flex flex-wrap justify-content-center align-content-center">
+  <select class="custom-select lang-select form-select m-1" v-model="selectedLanguage" @change="updateLanguage">
+    <option value="en">En</option>
+    <option value="sv">Sv</option>
   </select>
-
+  </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+$main-color : #616968;
+$secondary-color : #004140;
+$third-color : #343434;
+$text-color: #F8F7F6;
 
 .lang-select {
   min-width: 5rem;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+input, select {
+  background-color: $third-color;
+  color: $text-color;
+  color-scheme: dark;
+  border: none;
+}
+
+.custom-select {
+  background: $third-color url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='white' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right .75rem center/8px 10px !important;
 }
 
 </style>

@@ -1,22 +1,27 @@
 import { defineStore } from 'pinia';
 import { useWeatherAPIStore } from './WeatherAPIStore.js';
-import { processDailyData, calculateEnergy, calculateMonthlyData } from '../utils/dataUtils.js';
+import { processDailyData, processMonthlyData, processYearlyData} from '../utils/dataUtils.js';
 
 export const useDataStore = defineStore('data', {
   state: () => ({
     dataOutput: [], // Add the dataOutput property here
     dataMonthlyOutput: [],
+    dataYearlyOutput: [],
   }),
   actions: {
     async setData() {
       const weatherData = await useWeatherAPIStore().fetchData();
+
       const dataForDaily = await processDailyData(weatherData);
+      this.dataOutput = dataForDaily;
 
-      const completeData = await calculateEnergy(dataForDaily);
-      this.dataOutput = completeData;
+      const dataForMonthly = await processMonthlyData(weatherData);
+      this.dataMonthlyOutput = dataForMonthly;
 
-      const monthlyData = await calculateMonthlyData(completeData);
-      this.dataMonthlyOutput = monthlyData;
+      const dataForYearly = await processYearlyData(weatherData);
+      this.dataYearlyOutput = dataForYearly;
+
+
     },
   }
 });

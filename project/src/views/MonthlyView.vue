@@ -42,7 +42,6 @@ onMounted(async () => {
 </script>
 
 <template>
-    <h1 class="text-center m-5">Monthly</h1>
-
+    <img style="width: 100%; margin-top: -1rem; " src="https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/Namnlos-1024x614.png">
     {{  monthlyData }}
 </template>

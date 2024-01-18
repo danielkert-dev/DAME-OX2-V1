@@ -54,115 +54,119 @@ export function processDailyData(weatherData) {
           });
         }
   
-        // console.log(dataForDaily)
-        return dataForDaily; // Add this line to return the dataForDaily
-  }
-  
-  export function calculateEnergy(dataForDaily) {
-    /* //@Calculate
-      - Calculate energy for each day
-      - Energy =Panel Efficiency×Solar Irradiance×Panel Area×Time
-  
-      Comments:
-      - Performance ratio can be counted too. The more efficient the panel, the higher the ratio. 0 to 1
-      - Data input example
-      dataForDaily : {
-          date: 2024-01-01, // Date in ISO format
-          averageIrradiance: 100, // In W/m^2
-          sunshine: 5.24, // In hours and minutes
-          weather: 3, // Weather code
-          temperature: 10, // Temperature in Celsius
-      }
-    */
-  
-    if (dataForDaily && Array.isArray(dataForDaily)) {
-      // Solar Irradence = Direct Normal Irradiance
-      const panelArea = 56;
-      const panelEfficiency = 0.35;
-  
-      // Calculate energy for each day using the formula
-      let completeData = dataForDaily.map(day => {
-        const energy = day.totalIrradiance * panelArea * panelEfficiency;
-        // If before today then past if after today then future if today then current
-        const age =
-          day.date > new Date().toISOString().slice(0, 10)
-            ? "future"
-            : day.date === new Date().toISOString().slice(0, 10)
-            ? "current"
-            : "past";
-
-
-        let accuracy = 100;
-        if (age === 'current') {
-          accuracy = 99;
-        }
-        if (age === 'past') {
-          accuracy = 100;
-        }
-        if (age === 'future') {
-          accuracy = 90;
-        }
-
-        return {
-          date: day.date,
-          energyW: energy.toFixed(2),
-          energyKWh: (energy / 1000).toFixed(2),
-          weather: day.weather,
-          temperature: day.temperature,
-          sunshine: day.sunshine,
-          age: age,
-          accuracy: accuracy,
-        };
-      });
-
-      // remove last data completeData
-      completeData.pop();
-
+        if (dataForDaily && Array.isArray(dataForDaily)) {
+          // Solar Irradence = Direct Normal Irradiance
+          const panelArea = 56;
+          const panelEfficiency = 0.35;
+      
+          // Calculate energy for each day using the formula
+          let completeData = dataForDaily.map(day => {
+            const energy = day.totalIrradiance * panelArea * panelEfficiency;
+            // If before today then past if after today then future if today then current
+            const age =
+              day.date > new Date().toISOString().slice(0, 10)
+                ? "future"
+                : day.date === new Date().toISOString().slice(0, 10)
+                ? "current"
+                : "past";
     
-      // console.log(completeData);
-      return completeData;
-
-    }
-  }
-  
-  export function calculateMonthlyData(completeData) {
+    
+            let accuracy = 100;
+            if (age === 'current') {
+              accuracy = 99;
+            }
+            if (age === 'past') {
+              accuracy = 100;
+            }
+            if (age === 'future') {
+              accuracy = 90;
+            }
+    
+            return {
+              date: day.date,
+              energyW: energy.toFixed(2),
+              energyKWh: (energy / 1000).toFixed(2),
+              weather: day.weather,
+              temperature: day.temperature,
+              sunshine: day.sunshine,
+              age: age,
+              accuracy: accuracy,
+            };
+          });
+    
+          // remove last data completeData
+          completeData.pop();
+    
         
-    // Convert to monthly
-    const monthlyData = [];
-    let currentMonth = [];
-    let monthStartDate = null;
-
-    completeData.forEach((day, index) => {
-    if (!monthStartDate) {
-        monthStartDate = day.date;
-    }
-    currentMonth.push(day);
-
-    const nextDay = index + 1 < completeData.length ? new Date(completeData[index + 1].date) : null;
-
-    if (!nextDay || nextDay > new Date() || nextDay.getMonth() > new Date(day.date).getMonth()) {
-        const energySum = currentMonth.reduce((sum, entry) => sum + parseFloat(entry.energyW), 0);
-        const sunshineSum = currentMonth.reduce((sum, entry) => sum + parseFloat(entry.sunshine), 0);
-        const averageEnergy = (energySum / currentMonth.length).toFixed(2);
-
-        // Handle NaN case
-        const averageEnergyKWh = isNaN(averageEnergy) ? '0.00' : ((averageEnergy / 1000) * sunshineSum).toFixed(2);
-
-        monthlyData.push({
-        date: monthStartDate,
-        endDate: day.date,
-        averageEnergyW: averageEnergy,
-        averageEnergyKWh: averageEnergyKWh,
-        });
-
-        currentMonth = [];
-        monthStartDate = null;
-    }
-    });
-
-    // this.dataMonthlyOutput = monthlyData;
-    return monthlyData; // Add this line to return the monthlyData
+          // console.log(completeData);
+          return completeData;
   }
+}
+
+export function processMonthlyData(weatherData) {
+
+  /* 
+  date: january,
+  energyKWh: 100kwh,
+  weather: sunny,
+  sunsgine: ?,
+  age: past||current||future,
+  accuracy: accuracy,
+  */
+
+  console.log('processMonthlyData')
+
+  return weatherData
+
+}
+
+
+export function processYearlyData(weatherData) {
+
+
+  console.log('pr')
+
+  return weatherData
+}
+
+  // export function calculateMonthlyData(completeData) {
+        
+  //   // Convert to monthly
+  //   const monthlyData = [];
+  //   let currentMonth = [];
+  //   let monthStartDate = null;
+
+  //   completeData.forEach((day, index) => {
+  //   if (!monthStartDate) {
+  //       monthStartDate = day.date;
+  //   }
+  //   currentMonth.push(day);
+
+  //   const nextDay = index + 1 < completeData.length ? new Date(completeData[index + 1].date) : null;
+
+  //   if (!nextDay || nextDay > new Date() || nextDay.getMonth() > new Date(day.date).getMonth()) {
+  //       const energySum = currentMonth.reduce((sum, entry) => sum + parseFloat(entry.energyW), 0);
+  //       const sunshineSum = currentMonth.reduce((sum, entry) => sum + parseFloat(entry.sunshine), 0);
+  //       const averageEnergy = (energySum / currentMonth.length).toFixed(2);
+
+  //       // Handle NaN case
+  //       const averageEnergyKWh = isNaN(averageEnergy) ? '0.00' : ((averageEnergy / 1000) * sunshineSum).toFixed(2);
+
+  //       monthlyData.push({
+  //       date: monthStartDate,
+  //       endDate: day.date,
+  //       averageEnergyW: averageEnergy,
+  //       averageEnergyKWh: averageEnergyKWh,
+  //       });
+
+  //       currentMonth = [];
+  //       monthStartDate = null;
+  //   }
+  //   });
+
+  //   // this.dataMonthlyOutput = monthlyData;
+  //   return monthlyData; // Add this line to return the monthlyData
+  // }
 
   
   // export function calculateWeeklyData(completeData) {

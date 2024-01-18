@@ -4,7 +4,7 @@ export const weatherCodes = [{
 		"day":{
 			"description":"Sunny",
 			"color": "",
-			"image":"http://openweathermap.org/img/wn/01d@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/sunny.png"
 		},
 		"night":{
 			"description":"Clear",
@@ -14,7 +14,7 @@ export const weatherCodes = [{
 	"1":{
 		"day":{
 			"description":"Mainly Sunny",
-			"image":"http://openweathermap.org/img/wn/01d@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/sunny.png"
 		},
 		"night":{
 			"description":"Mainly Clear",
@@ -24,21 +24,21 @@ export const weatherCodes = [{
 	"2":{
 		"day":{
 			"description":"Partly Cloudy",
-			"image":"http://openweathermap.org/img/wn/02d@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/cloudy.png"
 		},
 		"night":{
 			"description":"Partly Cloudy",
-			"image":"http://openweathermap.org/img/wn/02n@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/cloudyn.png"
 		}
 	},
 	"3":{
 		"day":{
 			"description":"Cloudy",
-			"image":"http://openweathermap.org/img/wn/03d@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/cloud.png"
 		},
 		"night":{
 			"description":"Cloudy",
-			"image":"http://openweathermap.org/img/wn/03n@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/cloud.png"
 		}
 	},
 	"45":{
@@ -64,101 +64,101 @@ export const weatherCodes = [{
 	"51":{
 		"day":{
 			"description":"Light Drizzle",
-			"image":"http://openweathermap.org/img/wn/09d@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/something.png"
 		},
 		"night":{
 			"description":"Light Drizzle",
-			"image":"http://openweathermap.org/img/wn/09n@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/something.png"
 		}
 	},
 	"53":{
 		"day":{
 			"description":"Drizzle",
-			"image":"http://openweathermap.org/img/wn/09d@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/something.png"
 		},
 		"night":{
 			"description":"Drizzle",
-			"image":"http://openweathermap.org/img/wn/09n@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/something.png"
 		}
 	},
 	"55":{
 		"day":{
 			"description":"Heavy Drizzle",
-			"image":"http://openweathermap.org/img/wn/09d@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/something.png"
 		},
 		"night":{
 			"description":"Heavy Drizzle",
-			"image":"http://openweathermap.org/img/wn/09n@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/something.png"
 		}
 	},
 	"56":{
 		"day":{
 			"description":"Light Freezing Drizzle",
-			"image":"http://openweathermap.org/img/wn/09d@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/something.png"
 		},
 		"night":{
 			"description":"Light Freezing Drizzle",
-			"image":"http://openweathermap.org/img/wn/09n@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/something.png"
 		}
 	},
 	"57":{
 		"day":{
 			"description":"Freezing Drizzle",
-			"image":"http://openweathermap.org/img/wn/09d@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/something.png"
 		},
 		"night":{
 			"description":"Freezing Drizzle",
-			"image":"http://openweathermap.org/img/wn/09n@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/something.png"
 		}
 	},
 	"61":{
 		"day":{
 			"description":"Light Rain",
-			"image":"http://openweathermap.org/img/wn/10d@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/somethingcloudy.png"
 		},
 		"night":{
 			"description":"Light Rain",
-			"image":"http://openweathermap.org/img/wn/10n@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/nightrain.png"
 		}
 	},
 	"63":{
 		"day":{
 			"description":"Rain",
-			"image":"http://openweathermap.org/img/wn/10d@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/somethingcloudy.png"
 		},
 		"night":{
 			"description":"Rain",
-			"image":"http://openweathermap.org/img/wn/10n@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/nightrain.png"
 		}
 	},
 	"65":{
 		"day":{
 			"description":"Heavy Rain",
-			"image":"http://openweathermap.org/img/wn/10d@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/somethingcloudy.png"
 		},
 		"night":{
 			"description":"Heavy Rain",
-			"image":"http://openweathermap.org/img/wn/10n@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/nightrain.png"
 		}
 	},
 	"66":{
 		"day":{
 			"description":"Light Freezing Rain",
-			"image":"http://openweathermap.org/img/wn/10d@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/somethingcloudy.png"
 		},
 		"night":{
 			"description":"Light Freezing Rain",
-			"image":"http://openweathermap.org/img/wn/10n@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/nightrain.png"
 		}
 	},
 	"67":{
 		"day":{
 			"description":"Freezing Rain",
-			"image":"http://openweathermap.org/img/wn/10d@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/somethingcloudy.png"
 		},
 		"night":{
 			"description":"Freezing Rain",
-			"image":"http://openweathermap.org/img/wn/10n@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/nightrain.png"
 		}
 	},
 	"71":{
@@ -204,31 +204,31 @@ export const weatherCodes = [{
 	"80":{
 		"day":{
 			"description":"Light Showers",
-			"image":"http://openweathermap.org/img/wn/09d@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/something.png"
 		},
 		"night":{
 			"description":"Light Showers",
-			"image":"http://openweathermap.org/img/wn/09n@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/something.png"
 		}
 	},
 	"81":{
 		"day":{
 			"description":"Showers",
-			"image":"http://openweathermap.org/img/wn/09d@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/something.png"
 		},
 		"night":{
 			"description":"Showers",
-			"image":"http://openweathermap.org/img/wn/09n@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/something.png"
 		}
 	},
 	"82":{
 		"day":{
 			"description":"Heavy Showers",
-			"image":"http://openweathermap.org/img/wn/09d@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/something.png"
 		},
 		"night":{
 			"description":"Heavy Showers",
-			"image":"http://openweathermap.org/img/wn/09n@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/something.png"
 		}
 	},
 	"85":{
@@ -254,31 +254,31 @@ export const weatherCodes = [{
 	"95":{
 		"day":{
 			"description":"Thunderstorm",
-			"image":"http://openweathermap.org/img/wn/11d@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/thunder.png"
 		},
 		"night":{
 			"description":"Thunderstorm",
-			"image":"http://openweathermap.org/img/wn/11n@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/thunder.png"
 		}
 	},
 	"96":{
 		"day":{
 			"description":"Light Thunderstorms With Hail",
-			"image":"http://openweathermap.org/img/wn/11d@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/thunder.png"
 		},
 		"night":{
 			"description":"Light Thunderstorms With Hail",
-			"image":"http://openweathermap.org/img/wn/11n@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/thunder.png"
 		}
 	},
 	"99":{
 		"day":{
 			"description":"Thunderstorm With Hail",
-			"image":"http://openweathermap.org/img/wn/11d@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/thunder.png"
 		},
 		"night":{
 			"description":"Thunderstorm With Hail",
-			"image":"http://openweathermap.org/img/wn/11n@2x.png"
+			"image":"https://www.datanom.ax/~kjell/ox2/wp-content/uploads/2024/01/thunder.png"
 		}
 	}
 }]
