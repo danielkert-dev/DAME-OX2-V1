@@ -56,7 +56,7 @@ watch(
 </script>
 
 <template>
-  <nav class="d-flex justify-content-between px-2 mb-2">
+  <nav class="d-flex navbar">
     <div class="ms-2">
       <h4 class="mt-2">
         <img
@@ -128,14 +128,6 @@ nav {
   width: 100vw;
   background-color: $main-color !important;
   color: $text-color !important;
-}
-
-nav:first-child > span {
-  margin-right: auto;
-}
-
-nav:last-child > span {
-  margin-left: auto;
 }
 
 input,

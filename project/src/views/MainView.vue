@@ -310,7 +310,9 @@ const accuracyType = ref("PieChart");
       <button @click="prev()" class="append-buttons btn" style="font-size: 1.5rem">
         <
       </button>
-      <buton @click="next()" class="append-buttons btn">></buton>
+      <buton @click="next()" class="append-buttons btn" style="font-size: 1.5rem"
+        >></buton
+      >
     </div>
     <!-- {{ selectedSlide }}
 {{ selectedDate }}
